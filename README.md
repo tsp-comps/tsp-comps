@@ -1,4 +1,4 @@
-# tsp-comps
+# tsp comps
 
 Run the following command to install all necessary packages:
 
