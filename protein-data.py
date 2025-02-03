@@ -12,11 +12,11 @@ def clean_protein_data(filename):
     protein_data['combined_score'] = 1 - protein_data['combined_score']
     return protein_data
 
+# turn the processed protein data from clean_protein_data into an nx graph
 def graph_protein_data(raw_data):
     G = nx.Graph()
     for index, row in raw_data.iterrows():
         G.add_edge(row['#node1'], row['node2'], weight=row['combined_score'])
-    print(G)
     return G
 
 def main():
