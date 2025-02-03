@@ -12,5 +12,3 @@ file.close()
 #Here we create the graph and load the edges
 graph = networkx.Graph()
 graph.add_weighted_edges_from(edges)
-#This is a test to see if it is working
-print(graph.number_of_edges())

@@ -1,10 +1,10 @@
 import math
+from haversine import *
 
-#Formula to calculate the Euclidean distance between two points
+#We calculate the distance between the two points, and output the distance in Miles
 def distance(point1, point2):
-    difference_in_x = (float(point1[0]) - float(point2[0])) ** 2
-    difference_in_y = (float(point1[1]) - float(point2[1])) ** 2
-    return math.sqrt(difference_in_x + difference_in_y)
+    distance = haversine(point1, point2, unit = "mi")
+    return distance
 
 #We will read the dataset and add every point of it to a set.
 #This way we ensure we have all points of the graph and no duplicates
@@ -12,8 +12,10 @@ file = open("datasets/electric-grid/costs.txt", "r")
 coordinate_spots = set()
 for line in file:
     split_line = line.split("\t")[4:8]
-    coordinate_spots.add((split_line[0], split_line[1]))
-    coordinate_spots.add((split_line[2], split_line[3]))
+    if split_line[0] != '' and split_line[1] != '':
+        coordinate_spots.add((float(split_line[0]), float(split_line[1])))
+    if split_line[2] != '' and split_line[3] != '':
+        coordinate_spots.add((float(split_line[2]), float(split_line[3])))
 file.close()
     
 

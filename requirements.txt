@@ -1,2 +1,3 @@
 networkx
 tsplib95
+haversine
