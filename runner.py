@@ -17,22 +17,14 @@ def select_dataset():
 
         choice = input("Select a dataset to work on: wi for wi29, uy for uy734, " + 
                    "ca for ca4663.\nEnter the dataset index below: ")
+        options = {"wi": "wi29", "uy": "uy734", "ca": "ca4663"}
         
-        if choice == "wi":
-            print("wi29 dataset selected.")
-            return Datasets.process_tsp95("datasets/wi29.tsp")
+        if choice in options:
+            print(f"{options[choice]} dataset selected.")
+            return Datasets.process_tsp95(f"datasets/{options[choice]}.tsp")
 
-        elif choice == "uy":
-            print("uy734 dataset selected.")
-            return Datasets.process_tsp95("datasets/uy734.tsp")
-
-        elif choice == "ca":
-            print("ca4663 dataset selected.")
-            return Datasets.process_tsp95("datasets/ca4663.tsp")
-
-        else:
-            print("Invalid dataset index. Exiting.")
-            return None
+        print("Invalid dataset index. Exiting.")
+        return None
 
     elif number == "2":
         print("Electric grid dataset selected. This functionality is not yet supported!")
