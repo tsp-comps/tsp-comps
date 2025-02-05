@@ -7,7 +7,7 @@ https://tsplib95.readthedocs.io/en/stable/pages/usage.html
 
 def main():
 
-    wi_set = tsplib95.load('datasets/tsp95/uy734.tsp')
+    wi_set = tsplib95.load('datasets/tsp95/wi29.tsp')
     g_wi = wi_set.get_graph()
     print(nx.approximation.traveling_salesman_problem(g_wi))
 
