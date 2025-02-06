@@ -47,7 +47,7 @@ class Datasets(object):
         graph = nx.Graph()
         for index, row in protein_data.iterrows():
             graph.add_edge(row['#node1'], row['node2'], weight=row['combined_score'])
-            return graph
+        return graph
         
 
 
