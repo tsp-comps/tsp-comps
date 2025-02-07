@@ -1,10 +1,12 @@
 import networkx as nx
 
+# helper function to find the root of a given node in a dictionary
 def find(parent, n):
     if parent[n] == n:
         return n
     return find(parent, parent[n])
 
+# helper function to union two sets
 def union(parent, x, y):
     x_set = find(parent, x)
     y_set = find(parent, y)
@@ -17,14 +19,20 @@ def minimum_spanning_tree(graph):
         
         edges = sorted(list(graph.edges(data=True)), key=lambda x: x[2]['weight'])
 
+        # i is the index of the edge we are considering and e is the number of edges we have added to the mst
         i = 0
         e = 0
 
+        # parent is a dictionary that keeps track of the parent of each node
         parent = {node: node for node in graph.nodes()}
 
+        # while we haven't added all edges to our mst, we consider the next edge and if it doesn't
+        # create a cycle, we add it to the mst.
         while e < graph.number_of_nodes() - 1:
             u, v, w = edges[i]
             i += 1
+
+            # checks for cycle creation. If the roots of u and v are the same, then there is a cycle
             x = find(parent, u)
             y = find(parent, v)
             if x != y:
