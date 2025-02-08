@@ -42,6 +42,17 @@ def minimum_spanning_tree(graph):
 
         return mst
 
+# takes a networkx graph and returns a subgraph of the nodes with odd degree (part two of christofides algorithm)
+def find_odd_degree(graph):
+    odd_degree = nx.Graph()
+    for node in graph.nodes():
+        if graph.degree(node) % 2 != 0:
+            odd_degree.add_node(node)
+    for u, v, w in graph.edges(data=True):
+        if u in odd_degree.nodes() and v in odd_degree.nodes():
+            odd_degree.add_edge(u, v, weight=w['weight'])
+    return odd_degree
+
 def main():
     g = nx.Graph()
     g.add_edge(0, 1, weight=10)
@@ -59,7 +70,7 @@ def main():
     print("input graph:", g.edges(data=True))
     mst = minimum_spanning_tree(g)
     print("mst:", mst.edges(data=True))
-    print(nx.minimum_spanning_tree(g).edges(data=True))
+    print("odd degree nodes:", find_odd_degree(mst).edges(data=True))
 
 if __name__ == "__main__":
     main()
