@@ -71,10 +71,3 @@ edges = [(1,2),(2,3),(3,4),(1,4)]
 G.add_edges_from(edges)
 
 print(fleurys_algorithm(G))
-          
-     
-     
-     
-    
-        
-              
