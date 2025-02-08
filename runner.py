@@ -1,4 +1,5 @@
 from datasets import Datasets
+from smallest_insertion import SmallestInsertion
 
 # q: how do we save the results?
 # q: are we outputting the intermediary results?
@@ -21,7 +22,7 @@ def select_dataset():
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
-            return Datasets.process_tsp95(f"datasets/{options[choice]}.tsp")
+            return Datasets.process_tsp95(f"datasets/tsp95/{options[choice]}.tsp")
 
         print("Invalid dataset index. Exiting.")
         return None
@@ -54,7 +55,8 @@ def select_algorithm():
         print("Nearest Neighbor algorithm selected. This functionality is not yet supported!")
 
     elif number == "3":
-        print("Smallest Insertion Annealing algorithm selected. This functionality is not yet supported!")
+        print("Smallest Insertion algorithm selected.")
+        return SmallestInsertion()
 
     else:
         print("Invalid algorithm number. Exiting.")
@@ -69,6 +71,7 @@ def main():
     algorithm = select_algorithm()
     if algorithm is None:
         return
+    print("The distance tour is " +str(algorithm.solve(dataset)))
 
     return
 

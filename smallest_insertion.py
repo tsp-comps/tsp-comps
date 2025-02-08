@@ -37,13 +37,3 @@ class SmallestInsertion(object):
                 unvisited[:] = [node for node in unvisited if node != best_node]
 
         return currweight
-    
-# for testing purposes
-from datasets import Datasets
-
-if __name__ == "__main__":
-    si = SmallestInsertion()
-    graph = Datasets.process_tsp95("datasets/tsp95/wi29.tsp")
-    print(si.solve(graph))
-    sol = nx.approximation.traveling_salesman_problem(graph)
-    print(sum([graph[sol[i]][sol[i+1]]['weight'] for i in range(len(sol)-1)]))
