@@ -5,6 +5,7 @@ def is_odd(number):
           return True
      return False
 
+'''DFS counting how many nodes can be reached from the current'''
 def dfs_counter(graph, current, visited_nodes):
     neighbors = list(graph.neighbors(current))
     count = 1
@@ -14,7 +15,7 @@ def dfs_counter(graph, current, visited_nodes):
             count += dfs_counter(graph, node, visited_nodes)
     return count
 
-     
+'''Tests whether edge is a bridge'''     
 def is_valid_edge(graph, start, end):
     nodes = list(graph.nodes)
     start_degree = graph.degree(start)
@@ -30,9 +31,6 @@ def is_valid_edge(graph, start, end):
 
     for node in nodes:
         visited_nodes.update({node : False})
-    print(graph.edges)
-    print(start)
-    print(end)
     graph.remove_edge(start,end)
     count2 = dfs_counter(graph, start, visited_nodes)
      
@@ -64,6 +62,18 @@ def fleurys_algorithm(graph):
             start_node = node
             break
     return get_eulerian_tour(graph, start_node, [start_node])
+
+def eulerian_to_hamiltonian(eulerian_tour):
+    visited_nodes = {}
+    for node in eulerian_tour:
+        visited_nodes.update({node : False})
+    hamiltonian_path = []
+
+    for node in eulerian_tour:
+        if not visited_nodes[node]:
+            hamiltonian_path.append(node)
+        visited_nodes.update({node : True})
+    return hamiltonian_path
 
 G = nx.Graph()
 nx.DiGraph(directed = False)
