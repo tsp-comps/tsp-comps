@@ -173,7 +173,7 @@ def christofides_algorithm(graph):
 
 # testing
 G = nx.Graph()
-G = Datasets.process_tsp95('datasets/tsp95/ca4663.tsp')
+G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
 # Create a weighted complete graph with 5 nodes
 '''G.add_weighted_edges_from([
     (0, 1, 2),
