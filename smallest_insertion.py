@@ -16,7 +16,6 @@ class SmallestInsertion(object):
         currweight = graph[tour[0]][tour[1]]['weight']
 
         while unvisited:
-            best_node = None
             best_cost_increase = float('inf')
             best_position = None
 
@@ -24,16 +23,17 @@ class SmallestInsertion(object):
             for u in unvisited:
 
                 for i in range(len(tour)):
-                    # find the tentative cumulative edge weight of g by adding v to nearest node in g                    
-                    if graph[u][tour[i]]['weight'] < best_cost_increase:
-                        best_cost_increase = graph[u][tour[i]]['weight']
-                        # update the best solution
-                        best_node = u
-                        best_position = i + 1  
+                    # find the tentative cumulative edge weight of g by adding v to nearest node in g         
+                    cand = graph[u][tour[i]]['weight'] + graph[u][tour[(i+1) % len(tour)]]['weight'] \
+                            - graph[tour[i]][tour[(i+1) % len(tour)]]['weight']           
+                    if cand < best_cost_increase:
+                        best_cost_increase = cand
+                        best_position = i + 1
 
                 # insert the best node into the best position
                 currweight += best_cost_increase
-                tour.insert(best_position, best_node)
-                unvisited[:] = [node for node in unvisited if node != best_node]
+                tour.insert(best_position, u)
+                unvisited[:] = [node for node in unvisited if node != u]
 
+        print(tour)
         return currweight
