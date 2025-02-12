@@ -150,7 +150,7 @@ def eulerian_to_hamiltonian(eulerian_tour):
 
 '''takes a graph and returns a 1.5 approximation of the optimal TSP solution using christofides algorithm'''
 def christofides_algorithm(graph):
-    # broken into steps taken from the wikipedia page on the algorithm
+    # broken into steps taken from the wikipedia page on Christofides
 
     # Create a minimum spanning tree of graph.
     mst = kruskals_algorithm(graph)
