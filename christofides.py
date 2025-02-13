@@ -173,7 +173,8 @@ def christofides_algorithm(graph):
 
 # testing
 G = nx.Graph()
-G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+#G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
 # Create a weighted complete graph with 5 nodes
 '''G.add_weighted_edges_from([
     (0, 1, 2),
@@ -201,3 +202,4 @@ print("distance = ", distance(christofides_algorithm(G), G))
 print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
 print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
 print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
+
