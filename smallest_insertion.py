@@ -35,11 +35,4 @@ class SmallestInsertion(object):
                 tour.insert(best_position, u)
                 unvisited[:] = [node for node in unvisited if node != u]
 
-        nx_tour = nx.algorithms.approximation.traveling_salesman_problem(graph)
-        nx_sol = sum([graph[nx_tour[i]][nx_tour[i+1]]['weight'] for i in range(len(nx_tour)-1)])
-        our_sol = sum([graph[tour[i]][tour[i+1]]['weight'] for i in range(len(tour)-1)])
-        print(tour)
-        print(nx_tour)
-        print("nx thinks this is the solution: ", nx_sol)
-        print("our solution is: ", our_sol)
         return currweight
