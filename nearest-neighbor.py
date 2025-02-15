@@ -1,6 +1,9 @@
 import networkx as nx
 
 
+
+
+
 def smallest_insertion(graph):
     #We need to keep track of the nodes we have visited so far
     visited = set()
@@ -24,7 +27,10 @@ def smallest_insertion(graph):
                 total_distance += float(node[2]['weight'])
                 break
     path.append(first_head)
+    print(curr_head)
+    print(curr_head, first_head, graph.edges)
+    #total_distance += graph.edges[curr_head, first_head]
+
     return path, total_distance
-    
 
 
