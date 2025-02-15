@@ -13,4 +13,7 @@ def oddnode_subgraph(graph, mst):
     return graph.subgraph(odd_deg_nodes)
 
 def blossoms_algorithm(graph):
-    
+    matching = nx.Graph()
+    matching.add_nodes_from(graph.nodes)
+    for node in graph.nodes:
+         

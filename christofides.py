@@ -195,9 +195,10 @@ def distance(tour, graph):
         total += graph[tour[i]][tour[i + 1]]['weight']
     return total
 
-print("our tour:", christofides_algorithm(G))
-print("stops:", len(christofides_algorithm(G)))
-print("distance = ", distance(christofides_algorithm(G), G))
-print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
-print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
-print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
+if __name__ == "__main__":
+    print("our tour:", christofides_algorithm(G))
+    print("stops:", len(christofides_algorithm(G)))
+    print("distance = ", distance(christofides_algorithm(G), G))
+    print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
+    print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
+    print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))

@@ -55,13 +55,14 @@ def get_eulerian_tour(graph, current, path):
     
 '''Takes an Eulerian graph and returns an Eulerian tour of the graph.'''
 def fleurys_algorithm(graph):
-    nodes = list(graph.nodes)
+    copy_graph = graph.copy()
+    nodes = list(copy_graph.nodes)
     start_node = nodes[0]
     for node in nodes:
-        if is_odd(graph.degree[node]):
+        if is_odd(copy_graph.degree[node]):
             start_node = node
             break
-    return get_eulerian_tour(graph, start_node, [start_node])
+    return get_eulerian_tour(copy_graph, start_node, [start_node])
 
 def eulerian_to_hamiltonian(eulerian_tour):
     visited_nodes = {}
