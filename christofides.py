@@ -173,6 +173,8 @@ def christofides_algorithm(graph):
 
 # testing
 G = nx.Graph()
+#G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
 G = Datasets.process_tsp95('datasets/tsp95/uy734.tsp')
 # Create a weighted complete graph with 5 nodes
 '''G.add_weighted_edges_from([
@@ -204,7 +206,7 @@ def unique(tour):
             return False
     return True
 
-    print("our tour:", christofides_algorithm(G))
+    '''print("our tour:", christofides_algorithm(G))
     print("stops:", len(christofides_algorithm(G)))
     print("distance = ", distance(christofides_algorithm(G), G))
     if unique(christofides_algorithm(G)):
@@ -217,7 +219,7 @@ def unique(tour):
     if unique(nx.algorithms.approximation.christofides(G, weight="weight")):
         print("unique")
     else:
-        print("not unique")
+        print("not unique")'''
         
 if __name__ == "__main__":
     print("our tour:", christofides_algorithm(G))
@@ -226,3 +228,4 @@ if __name__ == "__main__":
     print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
     print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
     print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
+
