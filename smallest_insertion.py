@@ -1,6 +1,3 @@
-import random
-import networkx as nx
-
 class SmallestInsertion(object):
     def __init__(self):
         pass
@@ -11,8 +8,7 @@ class SmallestInsertion(object):
         """
         # randomly select two nodes and set them as a graph g
         nodes = list(graph.nodes)
-        tour = random.sample(nodes, 2)
-        tour.append(tour[0])
+        tour = [nodes[0], nodes[-1], nodes[0]]
         unvisited = [node for node in nodes if node not in tour]
         currweight = graph[tour[0]][tour[1]]['weight']*2
 
