@@ -10,7 +10,7 @@ def select_dataset():
     Select a dataset to work on.
     """
     number = input("Select a dataset to work on: 1 for TSP95, 2 for Electrical grid," + 
-                   "3 for Protein data.\nEnter the number below: ") # user input
+                   " 3 for Protein data.\nEnter the number below: ") # user input
     
     if len(number) == 0: 
         print("No dataset selected. Exiting.")
@@ -32,7 +32,16 @@ def select_dataset():
         print("Electric grid dataset selected. This functionality is not yet supported!")
 
     elif number == "3":
-        print("Protein data selected. This functionality is not yet supported!")
+        choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
+                   "\nEnter the dataset index below: ")
+        options = {"ALD": "YALD2-n11e45"}
+        
+        if choice in options:
+            print(f"{options[choice]} dataset selected.")
+            return Datasets.load_protein_dataset(f"datasets/proteins/{options[choice]}.tsv")
+
+        print("Invalid dataset index. Exiting.")
+        return None
 
     else:
         print("Invalid dataset number. Exiting.")

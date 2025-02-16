@@ -174,26 +174,6 @@ class Christofides(object):
         tour = self.eulerian_to_hamiltonian(circuit)
         return tour
 
-# testing
-G = nx.Graph()
-#G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
-G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
-G = Datasets.process_tsp95('datasets/tsp95/uy734.tsp')
-# Create a weighted complete graph with 5 nodes
-'''G.add_weighted_edges_from([
-    (0, 1, 2),
-    (0, 2, 3),
-    (0, 3, 1),
-    (0, 4, 4),
-    (1, 2, 2),
-    (1, 3, 3),
-    (1, 4, 1),
-    (2, 3, 4),
-    (2, 4, 2),
-    (3, 4, 3),
-])
-'''
-
 def distance(tour, graph):
     total = 0
     for i in range(len(tour) - 1):
@@ -225,9 +205,18 @@ def unique(tour):
         print("not unique")'''
         
 if __name__ == "__main__":
-    print("our tour:", christofides_algorithm(G))
-    print("stops:", len(christofides_algorithm(G)))
-    print("distance = ", distance(christofides_algorithm(G), G))
+    # testing
+    G = nx.Graph()
+    #G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+    G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
+    #G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+
+    christofides = Christofides()
+    tour = christofides.solve(G)
+
+    print("our tour:", tour)
+    print("stops:", len(tour))
+    print("distance = ", distance(tour, G))
     print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
     print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
     print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
