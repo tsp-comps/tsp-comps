@@ -27,4 +27,4 @@ class NeareastNeighbor:
         path.append(first_head)
         path.append(first_head)
         total_distance += float(graph.edges[curr_head, first_head]["weight"])
-        return path, total_distance
+        return total_distance
