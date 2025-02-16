@@ -188,21 +188,6 @@ def unique(tour):
         elif node in visited and node != visited[0]:
             return False
     return True
-
-    '''print("our tour:", christofides_algorithm(G))
-    print("stops:", len(christofides_algorithm(G)))
-    print("distance = ", distance(christofides_algorithm(G), G))
-    if unique(christofides_algorithm(G)):
-        print("unique")
-    else:
-        print("not unique")
-    print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
-    print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
-    print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
-    if unique(nx.algorithms.approximation.christofides(G, weight="weight")):
-        print("unique")
-    else:
-        print("not unique")'''
         
 if __name__ == "__main__":
     # testing
@@ -217,7 +202,9 @@ if __name__ == "__main__":
     print("our tour:", tour)
     print("stops:", len(tour))
     print("distance = ", distance(tour, G))
+    print("unique:", unique(tour))
     print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
     print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
     print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
+    print("unique:", unique(nx.algorithms.approximation.christofides(G, weight="weight")))
 
