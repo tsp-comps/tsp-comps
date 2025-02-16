@@ -1,5 +1,6 @@
 from datasets import Datasets
 from smallest_insertion import SmallestInsertion
+from christofides import Christofides
 
 # q: how do we save the results?
 # q: are we outputting the intermediary results?
@@ -49,7 +50,8 @@ def select_algorithm():
         print("No algorithm selected. Exiting.")
 
     elif number == "1":
-        print("Christofides algorithm selected. This functionality is not yet supported!")
+        print("Christofides algorithm selected.")
+        return Christofides()
 
     elif number == "2":
         print("Nearest Neighbor algorithm selected. This functionality is not yet supported!")
