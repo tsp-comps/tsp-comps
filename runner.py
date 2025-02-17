@@ -84,7 +84,9 @@ def main():
     algorithm = select_algorithm()
     if algorithm is None:
         return
+    beginning_time = time.time()
     print("The distance tour is " +str(algorithm.solve(dataset)))
+    print("total time is {}".format(time.time() - beginning_time))
 
     return
 
