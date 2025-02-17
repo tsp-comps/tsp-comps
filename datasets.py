@@ -45,8 +45,15 @@ class Datasets(object):
 
         # Then we create a graph from the data
         graph = nx.Graph()
-        for index, row in protein_data.iterrows():
+        for _, row in protein_data.iterrows():
             graph.add_edge(row['#node1'], row['node2'], weight=row['combined_score'])
+
+        # We add large edges between any unconnected nodes to ensure the graph is complete
+        for node1 in graph.nodes:
+            for node2 in graph.nodes:
+                if not graph.has_edge(node1, node2) and node1 != node2:
+                    graph.add_edge(node1, node2, weight=1)
+
         return graph
         
 
