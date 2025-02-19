@@ -2,6 +2,7 @@ from datasets import Datasets
 from smallest_insertion import SmallestInsertion
 from christofides import Christofides
 from nearest_neighbor import NeareastNeighbor
+import time
 
 # q: how do we save the results?
 # q: are we outputting the intermediary results?
