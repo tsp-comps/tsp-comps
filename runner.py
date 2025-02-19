@@ -31,7 +31,13 @@ def select_dataset():
         return None
 
     elif number == "2":
-        print("Electric grid dataset selected. This functionality is not yet supported!")
+        choice = input("Select a dataset to work on: EG for Electric Grid Dataset" + 
+                   "\nEnter the dataset index below: ")
+        options = {"EG": "electric_points"}
+
+        if choice in options:
+            print(f"{options[choice]} dataset selected.")
+            return Datasets.load_electric_grid_dataset(f"datasets/electric-grid/{options[choice]}.tsv")
 
     elif number == "3":
         choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
