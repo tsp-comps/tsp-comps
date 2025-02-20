@@ -18,13 +18,14 @@ class Datasets(object):
         g_tsp = tsp_set.get_graph()
         return g_tsp
 
-    def load_electric_grid_dataset():
+    def load_electric_grid_dataset(file_path):
         #Here we read the cleaned data from a file, make their format friendly to networkx
         #and add them to an array. These are the edges of our graph
         file = open("datasets/electric-grid/electric_points.tsv", "r")
         edges = []
         for line in file:
             split_line = line.split("\t")
+            split_line[2] = float(split_line[2])
             edges.append(tuple(split_line))
         file.close()
 
