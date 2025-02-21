@@ -1,3 +1,5 @@
+import random
+
 class SmallestInsertion(object):
     def __init__(self):
         pass
@@ -8,7 +10,8 @@ class SmallestInsertion(object):
         """
         # randomly select two nodes and set them as a graph g
         nodes = list(graph.nodes)
-        tour = [nodes[0], nodes[-1], nodes[0]]
+        random.seed(42)
+        tour = random.sample(nodes, 2)
         unvisited = [node for node in nodes if node not in tour]
         currweight = graph[tour[0]][tour[1]]['weight']*2
 
@@ -19,7 +22,7 @@ class SmallestInsertion(object):
                 best_position = None
                 best_cost_increase = float('inf')
 
-                for i in range(1, len(tour)-1):
+                for i in range(0, len(tour)-1):
                     # find the tentative cumulative edge weight of g by adding v to nearest node in g         
                     cand = graph[u][tour[i]]['weight'] + graph[u][tour[i + 1]]['weight'] - graph[tour[i]][tour[i + 1]]['weight']        
                     if cand < best_cost_increase:

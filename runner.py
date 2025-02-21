@@ -2,9 +2,11 @@ from datasets import Datasets
 from smallest_insertion import SmallestInsertion
 from christofides import Christofides
 from nearest_neighbor import NeareastNeighbor
+import time
 
-# q: how do we save the results?
-# q: are we outputting the intermediary results?
+"""
+For reproducing the timing results, run it as runner.py < input_data.txt
+"""
 
 def select_dataset():
     """
@@ -18,9 +20,11 @@ def select_dataset():
 
     elif number == "1":
 
-        choice = input("Select a dataset to work on: wi for wi29, uy for uy734, " + 
-                   "ca for ca4663.\nEnter the dataset index below: ")
-        options = {"wi": "wi29", "uy": "uy734", "ca": "ca4663"}
+        choice = input("Select a dataset to work on: wi for wi29, dj for dj38, qa for qa194, uy for uy734, " + 
+                   "zi for zi929, my for mu1979, ca for ca4663, gr for gr9882, fi for fi10639, it for it16862." + 
+                   "\nEnter the dataset index below: ")
+        options = {"wi": "wi29", "uy": "uy734", "ca": "ca4663", "fi": "fi10639", 
+                   "it": "it16862", "dj": "dj38", "qa": "qa194", "zi": "zi929", "my": "mu1979", "gr": "gr9882"}
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
@@ -30,7 +34,13 @@ def select_dataset():
         return None
 
     elif number == "2":
-        print("Electric grid dataset selected. This functionality is not yet supported!")
+        choice = input("Select a dataset to work on: EG for Electric Grid Dataset" + 
+                   "\nEnter the dataset index below: ")
+        options = {"EG": "electric_points"}
+
+        if choice in options:
+            print(f"{options[choice]} dataset selected.")
+            return Datasets.load_electric_grid_dataset(f"datasets/electric-grid/{options[choice]}.tsv")
 
     elif number == "3":
         choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
@@ -84,7 +94,9 @@ def main():
     algorithm = select_algorithm()
     if algorithm is None:
         return
+    beginning_time = time.time()
     print("The distance tour is " +str(algorithm.solve(dataset)))
+    print("total time is {}".format(time.time() - beginning_time))
 
     return
 
