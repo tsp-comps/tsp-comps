@@ -1,6 +1,8 @@
 from datasets import Datasets
 from smallest_insertion import SmallestInsertion
 from christofides import Christofides
+from nearest_neighbor import NeareastNeighbor
+import time
 
 """
 For reproducing the timing results, run it as runner.py < input_data.txt
@@ -32,7 +34,13 @@ def select_dataset():
         return None
 
     elif number == "2":
-        print("Electric grid dataset selected. This functionality is not yet supported!")
+        choice = input("Select a dataset to work on: EG for Electric Grid Dataset" + 
+                   "\nEnter the dataset index below: ")
+        options = {"EG": "electric_points"}
+
+        if choice in options:
+            print(f"{options[choice]} dataset selected.")
+            return Datasets.load_electric_grid_dataset(f"datasets/electric-grid/{options[choice]}.tsv")
 
     elif number == "3":
         choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
@@ -66,7 +74,8 @@ def select_algorithm():
         return Christofides()
 
     elif number == "2":
-        print("Nearest Neighbor algorithm selected. This functionality is not yet supported!")
+        print("Nearest Neighbor algorithm selected.")
+        return NeareastNeighbor()
 
     elif number == "3":
         print("Smallest Insertion algorithm selected.")
@@ -85,7 +94,9 @@ def main():
     algorithm = select_algorithm()
     if algorithm is None:
         return
+    beginning_time = time.time()
     print("The distance tour is " +str(algorithm.solve(dataset)))
+    print("total time is {}".format(time.time() - beginning_time))
 
     return
 
