@@ -22,7 +22,7 @@ class SmallestInsertion(object):
                 best_position = None
                 best_cost_increase = float('inf')
 
-                for i in range(1, len(tour)-1):
+                for i in range(0, len(tour)-1):
                     # find the tentative cumulative edge weight of g by adding v to nearest node in g         
                     cand = graph[u][tour[i]]['weight'] + graph[u][tour[i + 1]]['weight'] - graph[tour[i]][tour[i + 1]]['weight']        
                     if cand < best_cost_increase:
