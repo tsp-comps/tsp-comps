@@ -10,7 +10,8 @@ class SmallestInsertion(object):
         """
         # randomly select two nodes and set them as a graph g
         nodes = list(graph.nodes)
-        tour = random.sample(nodes, 2, seed=42)
+        random.seed(42)
+        tour = random.sample(nodes, 2)
         unvisited = [node for node in nodes if node not in tour]
         currweight = graph[tour[0]][tour[1]]['weight']*2
 
