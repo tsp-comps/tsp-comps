@@ -95,8 +95,16 @@ def main():
     if algorithm is None:
         return
     beginning_time = time.time()
-    print("The distance tour is " +str(algorithm.solve(dataset)))
+    tour, distance = algorithm.solve(dataset)
+    print("The distance tour is " +str(distance))
     print("total time is {}".format(time.time() - beginning_time))
+
+    tour_output = open("output.txt", "w")
+    for point in tour:
+        tour_output.write(str(point)+"\t")
+    
+    
+
 
     return
 
