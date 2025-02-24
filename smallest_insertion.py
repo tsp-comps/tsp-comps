@@ -35,4 +35,4 @@ class SmallestInsertion(object):
                 tour.insert(best_position, u)
                 unvisited[:] = [node for node in unvisited if node != u]
 
-        return currweight
+        return tour, currweight
