@@ -3,10 +3,13 @@ from smallest_insertion import SmallestInsertion
 from christofides import Christofides
 from nearest_neighbor import NeareastNeighbor
 import time
+import sys
 
 """
 For reproducing the timing results, run it as runner.py < input_data.txt
 """
+
+sys.setrecursionlimit(2147483647)
 
 def select_dataset():
     """
