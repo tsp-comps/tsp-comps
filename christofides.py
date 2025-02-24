@@ -1,5 +1,8 @@
 import networkx as nx
 from datasets import Datasets
+import sys
+
+sys.setrecursionlimit(2147483647)
 
 class Christofides(object):
     def __init__(self):
@@ -172,7 +175,7 @@ class Christofides(object):
         #print('circuit:', circuit)
         # Make the circuit found in previous step into a Hamiltonian circuit by skipping repeated vertices (shortcutting).
         tour = self.eulerian_to_hamiltonian(circuit)
-        return tour
+        return tour, distance(tour, graph)
 
 def distance(tour, graph):
     total = 0
