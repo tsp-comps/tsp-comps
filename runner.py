@@ -133,11 +133,6 @@ def main():
 
     visualize_tour(tour, dataset)
 
-    
-    
-    
-
-
     return
 
 if __name__=="__main__":
