@@ -2,3 +2,4 @@ networkx
 tsplib95
 haversine
 pandas
+matplotlib
