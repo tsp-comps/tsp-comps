@@ -2,6 +2,8 @@ from datasets import Datasets
 from smallest_insertion import SmallestInsertion
 from christofides import Christofides
 from nearest_neighbor import NeareastNeighbor
+import graphtour_visualization as gv
+import tsplib95
 import time
 import sys
 
@@ -31,7 +33,8 @@ def select_dataset():
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
-            return Datasets.process_tsp95(f"datasets/tsp95/{options[choice]}.tsp")
+            file_path = f"datasets/tsp95/{options[choice]}.tsp"
+            return [Datasets.process_tsp95(file_path), tsplib95.load(file_path)]
 
         print("Invalid dataset index. Exiting.")
         return None
@@ -43,7 +46,7 @@ def select_dataset():
 
         if choice in options:
             print(f"{options[choice]} dataset selected.")
-            return Datasets.load_electric_grid_dataset(f"datasets/electric-grid/{options[choice]}.tsv")
+            return [Datasets.load_electric_grid_dataset(f"datasets/electric-grid/{options[choice]}.tsv")]
 
     elif number == "3":
         choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
@@ -52,7 +55,7 @@ def select_dataset():
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
-            return Datasets.load_protein_dataset(f"datasets/proteins/{options[choice]}.tsv")
+            return [Datasets.load_protein_dataset(f"datasets/proteins/{options[choice]}.tsv")]
 
         print("Invalid dataset index. Exiting.")
         return None
@@ -89,6 +92,28 @@ def select_algorithm():
     
     return None
 
+def visualize_tour(tour, dataset):
+    """
+    Choose to visualize or not.
+    """
+    choice = input("Select an algorithm to use: y for Yes, n for No.\nEnter the option below: ") # user input
+    
+    if len(choice) == 0: 
+        print("No algorithm selected. Exiting.")
+
+    elif choice == "y": 
+        print("Starting Visualization.")
+        if len(dataset) == 2:
+            gv.draw_tsp_paths_euclidean(dataset[1], tour)
+        else:
+            gv.draw_tsp_paths_noneuclidean(dataset[0],tour)
+
+    elif choice == "n":
+        print("Visuzlization rejected. Exiting.")
+
+    else:
+        print("Invalid algorithm number. Exiting.")
+
 def main():
 
     dataset = select_dataset()
@@ -98,13 +123,17 @@ def main():
     if algorithm is None:
         return
     beginning_time = time.time()
-    tour, distance = algorithm.solve(dataset)
+    tour, distance = algorithm.solve(dataset[0])
     print("The distance tour is " +str(distance))
     print("total time is {}".format(time.time() - beginning_time))
 
     tour_output = open("output.txt", "w")
     for point in tour:
         tour_output.write(str(point)+"\t")
+
+    visualize_tour(tour, dataset)
+
+    
     
     
 
