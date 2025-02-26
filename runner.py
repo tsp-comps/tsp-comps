@@ -17,6 +17,7 @@ sys.setrecursionlimit(2147483647)
 output_file = ""
 
 def select_dataset():
+    global output_file
     """
     Select a dataset to work on.
     """
@@ -78,7 +79,7 @@ def select_algorithm():
     Select an algorithm to use.
     """
     number = input("Select an algorithm to use: 1 for Christofides, 2 for Nearest Neighbor, " + 
-                   "3 for Smallest Insertion.\nEnter the number below: ") # user input
+                   "3 for Smallest Insertion, 4 for Nearest Neighbor Optimized.\nEnter the number below: ") # user input
     
     if len(number) == 0: 
         print("No algorithm selected. Exiting.")
@@ -139,7 +140,7 @@ def main():
     if algorithm is None:
         return
     beginning_time = time.time()
-    tour, distance = algorithm.solve(dataset)
+    tour, distance = algorithm.solve(dataset[0])
     print("The distance tour is " +str(distance))
     print("total time is {}".format(time.time() - beginning_time))
 
