@@ -2,7 +2,8 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 import christofides as cf
-import smallest_insertion as si
+from datasets import Datasets
+import tsplib95
 
 #Creates a complete graph with specified number of nodes and random edge weights integers 1-100.
 def create_test_graph(num_nodes):
@@ -31,7 +32,7 @@ def path_intersection(path1, path2):
     return shared_edges
 
 #Draws 1-3 tsp paths for a graph
-def draw_tsp_paths(G, path1=None, path2=None, path3=None):
+def draw_tsp_paths_noneuclidean(G, path1=None, path2=None, path3=None):
     pos = nx.random_layout(G)  # positions for all nodes
 
     # Draw the graph
@@ -90,10 +91,37 @@ def draw_tsp_paths(G, path1=None, path2=None, path3=None):
 
     plt.title("Graph Visualization")
     plt.show()
+
+def draw_tsp_paths_euclidean(tspset, path):
+    coords = tspset.as_name_dict()["node_coords"].values()
+    tspgraph = tspset.get_graph()
+    xvals = []
+    yvals = []
+    for point in coords: 
+        xvals.append(point[0])
+        yvals.append(point[1])
+
+    plt.scatter(xvals,yvals)
+
+    #plot path
+    pathx = []
+    pathy = []
+    for node in path:
+        pathx.append(xvals[node - 1])
+        pathy.append(yvals[node - 1])
+    
+    plt.plot(pathx, pathy, 'go-', label='path', linewidth=2)
+
+    plt.show()
+
+    
+
+
     
 
 if __name__ == "__main__":
-    G = create_test_graph(100)
+    '''
+    G = create_test_graph(1000)
 
     # Find the shortest path
     path1 = cf.christofides_algorithm(G)
@@ -105,4 +133,17 @@ if __name__ == "__main__":
     print("Greedy tsp path: ",path3)
 
     # Draw the graph and highlight the paths
-    draw_tsp_paths(G, path1,path2,path3)
+    draw_tsp_paths_noneuclidean(G, path1)
+    '''
+
+    tsp_set = tsplib95.load(f"datasets/tsp95/wi29.tsp")
+    g_tsp = tsp_set.get_graph()
+    
+    christofides = cf.Christofides()
+    tour = christofides.solve(g_tsp)
+
+
+    print()
+    print()
+    draw_tsp_paths_euclidean(tsp_set,tour)
+

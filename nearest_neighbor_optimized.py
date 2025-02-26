@@ -1,7 +1,16 @@
 import networkx as nx
-class NeareastNeighbor:
+class NeareastNeighborOptimized:
     def __init__(self):
         pass
+    def find_closest_no_sorting(self, graph_edges, visited):
+        min = float("inf")
+        min_edge = None
+        for edge in graph_edges:
+            if edge[1] not in visited and edge[2]['weight'] < min:
+                min = edge[2]["weight"]
+                min_edge = edge
+        return min_edge
+                
     def solve(self, graph):
         print("I'm running")
         #We need to keep track of the nodes we have visited so far
@@ -16,14 +25,12 @@ class NeareastNeighbor:
         total_distance = 0
         while len(path) != graph.number_of_nodes():
             edges_head = list(graph.edges(curr_head, data = True))
-            closest_nodes_to_head = sorted(edges_head, key = lambda x: float(x[2]['weight']))
-            for node in closest_nodes_to_head:
-                if node[1] not in visited:
-                    visited.add(node[1])
-                    path.append(node[1])
-                    curr_head = node[1]
-                    total_distance += float(node[2]['weight'])
-                    break
+            closest_node_to_head = self.find_closest_no_sorting(edges_head, visited)
+            visited.add(closest_node_to_head[1])
+            path.append(closest_node_to_head[1])
+            curr_head = closest_node_to_head[1]
+            total_distance += float(closest_node_to_head[2]['weight'])
         path.append(first_head)
         total_distance += float(graph.edges[curr_head, first_head]["weight"])
         return path, total_distance
+

@@ -12,6 +12,7 @@ class SmallestInsertion(object):
         nodes = list(graph.nodes)
         random.seed(42)
         tour = random.sample(nodes, 2)
+        tour = tour + [tour[0]]
         unvisited = [node for node in nodes if node not in tour]
         currweight = graph[tour[0]][tour[1]]['weight']*2
 
@@ -34,4 +35,4 @@ class SmallestInsertion(object):
                 tour.insert(best_position, u)
                 unvisited[:] = [node for node in unvisited if node != u]
 
-        return currweight
+        return tour, currweight
