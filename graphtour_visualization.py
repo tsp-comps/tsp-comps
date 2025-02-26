@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import christofides as cf
 from datasets import Datasets
 import tsplib95
+import ast
 
 #Creates a complete graph with specified number of nodes and random edge weights integers 1-100.
 def create_test_graph(num_nodes):
@@ -36,7 +37,7 @@ def draw_tsp_paths_noneuclidean(G, path1=None, path2=None, path3=None):
     pos = nx.random_layout(G)  # positions for all nodes
 
     # Draw the graph
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=100, font_size=10, font_color='black', font_weight='normal', arrows=True,width=0)
+    nx.draw(G, pos, with_labels=False, node_color='lightblue', node_size=100, font_size=10, font_color='black', font_weight='normal', arrows=True,width=0)
 
     # Highlight the path1 if provided
     if path1:
@@ -92,23 +93,32 @@ def draw_tsp_paths_noneuclidean(G, path1=None, path2=None, path3=None):
     plt.title("Graph Visualization")
     plt.show()
 
-def draw_tsp_paths_euclidean(tspset, path):
-    coords = tspset.as_name_dict()["node_coords"].values()
-    tspgraph = tspset.get_graph()
-    xvals = []
-    yvals = []
-    for point in coords: 
-        xvals.append(point[0])
-        yvals.append(point[1])
-
-    plt.scatter(xvals,yvals)
-
-    #plot path
+#Given a tsp95 data set and a path, plots bath respecting euclidean points
+def draw_tsp_paths_euclidean(path, pointset=None):
     pathx = []
     pathy = []
-    for node in path:
-        pathx.append(xvals[node - 1])
-        pathy.append(yvals[node - 1])
+    if pointset != None:
+        xvals = []
+        yvals = []
+        coords = pointset.as_name_dict()["node_coords"].values()
+        tspgraph = pointset.get_graph()
+        for point in coords:
+            xvals.append(point[0])
+            yvals.append(point[1])
+        plt.scatter(xvals,yvals)
+        for node in path:
+            pathx.append(xvals[node - 1])
+            pathy.append(yvals[node - 1])
+    
+    else:
+        for point in path:
+            litpoint = ast.literal_eval(point)
+            pathx.append(litpoint[0])
+            pathy.append(litpoint[1])
+    
+    
+
+
     
     plt.plot(pathx, pathy, 'go-', label='path', linewidth=2)
 
@@ -135,15 +145,3 @@ if __name__ == "__main__":
     # Draw the graph and highlight the paths
     draw_tsp_paths_noneuclidean(G, path1)
     '''
-
-    tsp_set = tsplib95.load(f"datasets/tsp95/wi29.tsp")
-    g_tsp = tsp_set.get_graph()
-    
-    christofides = cf.Christofides()
-    tour = christofides.solve(g_tsp)[0]
-
-
-    print()
-    print()
-    draw_tsp_paths_euclidean(tsp_set,tour)
-
