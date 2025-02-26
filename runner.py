@@ -104,9 +104,13 @@ def visualize_tour(tour, dataset):
     elif choice == "y": 
         print("Starting Visualization.")
         if len(dataset) == 2:
-            gv.draw_tsp_paths_euclidean(dataset[1], tour)
+            gv.draw_tsp_paths_euclidean(tour, dataset[1])
         else:
-            gv.draw_tsp_paths_noneuclidean(dataset[0],tour)
+            print(type(tour[0]))
+            if type(tour[0]) == str:
+                gv.draw_tsp_paths_euclidean(tour)
+            else:
+                gv.draw_tsp_paths_noneuclidean(dataset[0], tour)
 
     elif choice == "n":
         print("Visuzlization rejected. Exiting.")
