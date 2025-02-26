@@ -145,5 +145,5 @@ if __name__ == "__main__":
 
     print()
     print()
-    draw_tsp_paths_euclidean(tsp_set,tour)
+    draw_tsp_paths_euclidean(tsp_set,tour[0])
 

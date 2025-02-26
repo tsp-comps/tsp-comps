@@ -1,6 +1,7 @@
 import networkx as nx
 from datasets import Datasets
 import sys
+from graphtour_visualization import *
 
 sys.setrecursionlimit(2147483647)
 
@@ -161,6 +162,7 @@ class Christofides(object):
         # Create a minimum spanning tree of graph.
         mst = self.kruskals_algorithm(graph)
         #print('mst:', mst.edges)
+        draw_tsp_paths_euclidean(graph, mst.edges)
         # Find the odd degree vertices of the mst
         odd_degree = self.find_odd_degree(mst, graph)
         #print('odd deg:', odd_degree.edges)
@@ -196,18 +198,18 @@ if __name__ == "__main__":
     # testing
     G = nx.Graph()
     #G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
-    G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
-    #G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+    #G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
+    G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
 
     christofides = Christofides()
     tour = christofides.solve(G)
+    nxTour = nx.algorithms.approximation.christofides(G, weight="weight")
 
     print("our tour:", tour)
     print("stops:", len(tour))
     print("distance = ", distance(tour, G))
     print("unique:", unique(tour))
-    print("nx tour:", nx.algorithms.approximation.christofides(G, weight="weight"))
-    print("stops:", len(nx.algorithms.approximation.christofides(G, weight="weight")))
-    print("distance = ", distance(nx.algorithms.approximation.christofides(G, weight="weight"), G))
-    print("unique:", unique(nx.algorithms.approximation.christofides(G, weight="weight")))
-
+    print("nx tour:", nxTour)
+    print("stops:", len(nxTour))
+    print("distance = ", nxTour, G)
+    print("unique:", unique(nxTour))
