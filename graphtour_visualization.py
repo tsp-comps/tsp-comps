@@ -145,23 +145,3 @@ if __name__ == "__main__":
     # Draw the graph and highlight the paths
     draw_tsp_paths_noneuclidean(G, path1)
     '''
-
-    
-    
-    file = open("datasets/electric-grid/electric_points.tsv", "r")
-    edges = []
-    for line in file:
-        split_line = line.split("\t")
-        split_line[2] = float(split_line[2])
-        edges.append(tuple(split_line))
-    file.close()
-
-    graph = nx.Graph()
-    graph.add_weighted_edges_from(edges)
-
-    tour = nx.algorithms.approximation.christofides(graph, weight="weight")
-
-
-    print()
-    draw_tsp_paths_euclidean(tour)
-
