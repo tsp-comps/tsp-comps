@@ -140,7 +140,7 @@ if __name__ == "__main__":
     g_tsp = tsp_set.get_graph()
     
     christofides = cf.Christofides()
-    tour = christofides.solve(g_tsp[0])
+    tour = christofides.solve(g_tsp)
 
 
     print()
