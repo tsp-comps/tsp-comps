@@ -60,6 +60,8 @@ def select_dataset():
         choice = input("Select a dataset to work on: ALD for Yeast Alcohol Dehydrogenase" + 
                    "\nEnter the dataset index below: ")
         options = {"ALD": "YALD2-n11e45"}
+
+        output_file += "_"+choice
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
