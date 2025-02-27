@@ -18,23 +18,23 @@ def number_of_common_edges(tour1, tour2):
 
 
 
-def array_splicer(suggester, tour):
-    order_starting_from_player = []
-    order_before_player = []
+def array_splicer(target_number, tour):
+    order_starting_from_target_number = []
+    order_before_target_number = []
     i = 0
     while True:
-        if tour[i] == suggester:
+        if tour[i] == target_number:
             break
-        order_before_player.append(tour[i])
+        order_before_target_number.append(tour[i])
         i += 1
 
     i += 1
-    order_starting_from_player.append(suggester)
+    order_starting_from_target_number.append(target_number)
     while i < len(tour):
-        order_starting_from_player.append(tour[i])
+        order_starting_from_target_number.append(tour[i])
         i += 1
-    order_starting_from_player = order_starting_from_player + order_before_player
-    return order_starting_from_player
+    order_starting_from_target_number = order_starting_from_target_number + order_before_target_number
+    return order_starting_from_target_number
 
 def find_path_length(tour, compare):
     i = 0
@@ -44,6 +44,8 @@ def find_path_length(tour, compare):
 
 
 def find_longest_consecutive_path(tour, tour2):
+    tour.pop()
+    tour2.pop()
     all_tours = []
     for i in range(len(tour2)):
         all_tours.append(array_splicer(i + 1, tour2))
@@ -52,8 +54,3 @@ def find_longest_consecutive_path(tour, tour2):
         curr_tour = array_splicer(item, tour)
         longest_path = max(longest_path, find_path_length(curr_tour, all_tours[item - 1]))
     return longest_path
-
-    
-    
-
-    
