@@ -14,10 +14,12 @@ For reproducing the timing results, run it as runner.py < input_data.txt
 
 sys.setrecursionlimit(2147483647)
 
-output_file = ""
+input_file = ""
+should_update = False
 
 def select_dataset():
-    global output_file
+    global input_file
+    global should_update
     """
     Select a dataset to work on.
     """
@@ -35,7 +37,7 @@ def select_dataset():
         options = {"wi": "wi29", "uy": "uy734", "ca": "ca4663", "fi": "fi10639", 
                    "it": "it16862", "dj": "dj38", "qa": "qa194", "zi": "zi929", "my": "mu1979", "gr": "gr9882"}
 
-        output_file += "_"+choice
+        input_file += "_"+choice
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
@@ -50,7 +52,8 @@ def select_dataset():
                    "\nEnter the dataset index below: ")
         options = {"EG": "electric_points"}
 
-        output_file += "_"+choice
+        input_file += "_"+choice
+        should_update = True
 
         if choice in options:
             print(f"{options[choice]} dataset selected.")
@@ -61,7 +64,9 @@ def select_dataset():
                    "\nEnter the dataset index below: ")
         options = {"ALD": "YALD2-n11e45"}
 
-        output_file += "_"+choice
+        
+        input_file += "_"+choice
+        should_update = True
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
@@ -76,7 +81,7 @@ def select_dataset():
     return None
 
 def select_algorithm():
-    global output_file
+    global input_file
     """
     Select an algorithm to use.
     """
@@ -88,28 +93,28 @@ def select_algorithm():
 
     elif number == "1":
         print("Christofides algorithm selected.")
-        output_file += "_christofides"
-        return Christofides()
+        input_file += "_christofides"
+        return True
 
     elif number == "2":
         print("Nearest Neighbor algorithm selected.")
-        output_file += "_nearestneighbor"
-        return NeareastNeighbor()
+        input_file += "_nearestneighbor"
+        return True
 
     elif number == "3":
         print("Smallest Insertion algorithm selected.")
-        output_file += "_smallestinsertion"
-        return SmallestInsertion()
+        input_file += "_smallestinsertion"
+        return True
 
     elif number == "4":
         print("Nearest Neighbor Optimizes algorithm selected.")
-        output_file += "_nearestneighboroptimized"
-        return NeareastNeighborOptimized()
+        input_file += "_nearestneighboroptimized"
+        return True
 
     else:
         print("Invalid algorithm number. Exiting.")
     
-    return None
+    return False
 
 def visualize_tour(tour, dataset):
     """
@@ -125,7 +130,8 @@ def visualize_tour(tour, dataset):
         if len(dataset) == 2:
             gv.draw_tsp_paths_euclidean(tour, dataset[1])
         else:
-            if tour[0][0] == '(':
+            print(type(tour[0]))
+            if type(tour[0]) == str:
                 gv.draw_tsp_paths_euclidean(tour)
             else:
                 gv.draw_tsp_paths_noneuclidean(dataset[0], tour)
@@ -142,16 +148,19 @@ def main():
     if dataset is None:
         return
     algorithm = select_algorithm()
-    if algorithm is None:
+    if not algorithm:
         return
-    beginning_time = time.time()
-    tour, distance = algorithm.solve(dataset[0])
-    print("The distance tour is " +str(distance))
-    print("total time is {}".format(time.time() - beginning_time))
+    tour_file = open("results/tour"+input_file+".txt", "r")
+    tour = []
+    for line in tour_file:
+        line = line.split()
+        i = 0
+        while i < len(line) and not should_update:
+            line[i] = int(line[i])
+            i += 1
+        tour += line
+    print(tour)
 
-    tour_output = open("results/tour"+output_file+".txt", "w")
-    for point in tour:
-        tour_output.write(str(point)+"\t")
 
     visualize_tour(tour, dataset)
 
