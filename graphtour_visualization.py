@@ -145,3 +145,9 @@ if __name__ == "__main__":
     # Draw the graph and highlight the paths
     draw_tsp_paths_noneuclidean(G, path1)
     '''
+
+    points = tsplib95.load('datasets/tsp95/wi29.tsp')
+    G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
+    christofides = cf.Christofides()
+    path = christofides.solve(G)[0]
+    draw_tsp_paths_euclidean(path, points)

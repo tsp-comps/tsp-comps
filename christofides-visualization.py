@@ -2,10 +2,11 @@ import networkx as nx
 from datasets import Datasets
 import sys
 from graphtour_visualization import *
+import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(2147483647)
 
-class Christofides(object):
+class Christofides_Vis(object):
     def __init__(self):
         pass
 
@@ -156,27 +157,34 @@ class Christofides(object):
         return hamiltonian_path
 
     '''takes a graph and returns a 1.5 approximation of the optimal TSP solution using christofides algorithm'''
-    def solve(self, graph):
+    def solve(self, graph, pointset):
         # broken into steps taken from the wikipedia page on Christofides
+        draw_nx_graph(nx.Graph(), pointset, just_nodes=True)
 
         # Create a minimum spanning tree of graph.
         mst = self.kruskals_algorithm(graph)
-        #print('mst:', mst.edges)
-        #draw_tsp_paths_euclidean(graph, mst.edges)
+        #draw_nx_graph(mst, pointset)
+
         # Find the odd degree vertices of the mst
         odd_degree = self.find_odd_degree(mst, graph)
-        #print('odd deg:', odd_degree.edges)
+        #draw_nx_graph(odd_degree, pointset, just_nodes=True)
+
         # Find a minimum-weight perfect matching in the subgraph induced in G by O.
         mpm = self.blossom_algorithm(odd_degree)
-        #print('mpm:', mpm.edges)
+        #draw_nx_graph(mpm, pointset)
+
         # Combine the edges of the mst and the mpm to form a connected multigraph in which each vertex has even degree.
         multigraph = self.combine_graphs(mst, mpm)
-        #print('multigraph:', multigraph.edges)
+        #draw_nx_graph(multigraph, pointset)
+
         # Form an Eulerian circuit in H.
         circuit = self.fleurys_algorithm(multigraph)
-        #print('circuit:', circuit)
+        #draw_tsp_paths_euclidean(circuit, pointset)
+
         # Make the circuit found in previous step into a Hamiltonian circuit by skipping repeated vertices (shortcutting).
         tour = self.eulerian_to_hamiltonian(circuit)
+
+        draw_tsp_paths_euclidean(tour, pointset)
         return tour, distance(tour, graph)
 
 def distance(tour, graph):
@@ -193,24 +201,27 @@ def unique(tour):
         elif node in visited and node != visited[0]:
             return False
     return True
-        
+
+def draw_nx_graph(graph, pointset, just_nodes=False):
+    xvals = []
+    yvals = []
+    coords = pointset.as_name_dict()["node_coords"].values()
+    for point in coords:
+        xvals.append(point[0])
+        yvals.append(point[1])
+    plt.scatter(xvals,yvals, color = 'grey')
+    if just_nodes == False:
+        for edge in graph.edges():
+            plt.plot([xvals[edge[0]-1], xvals[edge[1]-1]], [yvals[edge[0]-1], yvals[edge[1]-1]], 'go-', label='path', linewidth=2)
+    else:
+        for node in graph.nodes():
+            plt.scatter(xvals[node-1],yvals[node-1], color = 'green')
+    plt.show()
+
 if __name__ == "__main__":
-    # testing
     G = nx.Graph()
-    #G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
-    #G = Datasets.load_protein_dataset('datasets/proteins/YALD2-n11e45.tsv')
-    G = Datasets.process_tsp95('datasets/tsp95/wi29.tsp')
-    print(G.edges())
-
-    christofides = Christofides()
-    tour = christofides.solve(G)[0]
-    nxTour = nx.algorithms.approximation.christofides(G, weight="weight")
-
-    print("our tour:", tour)
-    print("stops:", len(tour))
-    print("distance = ", distance(tour, G))
-    print("unique:", unique(tour))
-    print("nx tour:", nxTour)
-    print("stops:", len(nxTour))
-    print("distance = ", nxTour, G)
-    print("unique:", unique(nxTour))
+    filename = 'datasets/tsp95/dj38.tsp'
+    G = Datasets.process_tsp95(filename)
+    G_pts = tsplib95.load(filename)
+    christofides = Christofides_Vis()
+    tour = christofides.solve(G, G_pts)[0]
