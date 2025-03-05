@@ -3,219 +3,66 @@ from datasets import Datasets
 import sys
 from graphtour_visualization import *
 import matplotlib.pyplot as plt
+from christofides import Christofides
 
 sys.setrecursionlimit(2147483647)
 
-class Christofides_Vis(object):
-    def __init__(self):
-        pass
+'''runs the christofides algorithm as in Christofides.py with a visualization for each step.'''
+def vis_cf(graph, pointset):
+        cf = Christofides()
 
-    # helper function to find the root of a given node in a dictionary
-    def find(self, parent, n):
-        if parent[n] == n:
-            return n
-        return self.find(parent, parent[n])
+        #draw the input graph without edges for readability
+        draw_nx_graph(nx.Graph(), pointset, just_nodes=True, title="Input Graph")
 
-    # helper function to union two sets
-    def union(self, parent, x, y):
-        x_set = self.find(parent, x)
-        y_set = self.find(parent, y)
-        if x_set != y_set:
-            parent[x_set] = y_set
+        # Create and draw a minimum spanning tree of graph.
+        mst = cf.kruskals_algorithm(graph)
+        draw_nx_graph(mst, pointset, title="Minimum Spanning Tree")
 
-    '''takes a networkx graph and returns a minimum spanning tree of that graph using Kruskal's algorithm'''
-    def kruskals_algorithm(self, graph):
-            mst = nx.Graph()    
-            
-            edges = sorted(list(graph.edges(data=True)), key=lambda x: x[2]['weight'])
+        # Find the odd degree vertices of the mst and draw them alongside the even degree nodes in a different color
+        odd_degree = cf.find_odd_degree(mst, graph)
+        draw_nx_graph(odd_degree, pointset, just_nodes=True, title="Odd Degree Vertices")
 
-            # i is the index of the edge we are considering and e is the number of edges we have added to the mst
-            i = 0
-            e = 0
+        # Find a minimum-weight perfect matching in the subgraph induced in G by O and draw it alongside the other nodes in the input
+        mpm = cf.blossom_algorithm(odd_degree)
+        draw_nx_graph(mpm, pointset, title="Minimum Weight Perfect Matching")
 
-            # parent is a dictionary that keeps track of the parent of each node
-            parent = {node: node for node in graph.nodes()}
+        # Combine the edges of the mst and the mpm to form a connected multigraph in which each vertex has even degree. Draw it
+        multigraph = cf.combine_graphs(mst, mpm)
+        draw_nx_graph(multigraph, pointset, title="Multigraph")
 
-            # while we haven't added all edges to our mst, we consider the next edge and if it doesn't
-            # create a cycle, we add it to the mst.
-            while e < graph.number_of_nodes() - 1:
-                u, v, w = edges[i]
-                i += 1
-
-                # checks for cycle creation. If the roots of u and v are the same, then there is a cycle
-                x = self.find(parent, u)
-                y = self.find(parent, v)
-                if x != y:
-                    e += 1
-                    mst.add_edge(u, v, weight=w['weight'])
-                    self.union(parent, x, y)
-
-            return mst
-
-    def is_odd(self, number):
-        if number % 2 == 1:
-            return True
-        return False
-
-    '''takes a networkx graph and returns a subgraph of the nodes with odd degree (part two of christofides algorithm)'''
-    def find_odd_degree(self, mst, graph):
-        odd_degree = nx.Graph()
-        for node in mst.nodes():
-            if self.is_odd(mst.degree(node)):
-                odd_degree.add_node(node)
-        for u, v, w in graph.edges(data=True):
-            if u in odd_degree.nodes() and v in odd_degree.nodes():
-                odd_degree.add_edge(u, v, weight=w['weight'])
-        return odd_degree
-
-    ''' takes a graph and returns a minimum weight perfect matching of the graph'''
-    def blossom_algorithm(self, graph):
-        # networkX function that returns the matching as a set of node pairs
-        mpm_set = nx.algorithms.matching.min_weight_matching(graph, weight="weight")
-
-        # creates a graph with the node pairs connected by their corresponding edges in the initial graph
-        mpm = nx.Graph()
-        for u, v in mpm_set:
-            mpm.add_edge(u, v, weight=graph[u][v]['weight'])
-        return mpm
-
-    '''takes two graphs and returns a multigraph'''
-    def combine_graphs(self, graph1, graph2):
-        multigraph = nx.MultiGraph()
-        for u, v, w in graph1.edges(data=True):
-            multigraph.add_edge(u, v, weight=w['weight'])
-        for u, v, w in graph2.edges(data=True):
-            multigraph.add_edge(u, v, weight=w['weight'])
-        return multigraph
-
-    def dfs_counter(self, graph, current, visited_nodes):
-        neighbors = list(graph.neighbors(current))
-        count = 1
-        visited_nodes[current] = True
-        for node in neighbors:
-            if visited_nodes[node] == False:
-                count += self.dfs_counter(graph, node, visited_nodes)
-        return count
-
-    def is_valid_edge(self, graph, start, end):
-        nodes = list(graph.nodes)
-        start_degree = graph.degree(start)
-        #valid if degree is 1
-        if start_degree == 1:
-            return True
-        
-        #valid if the edge is not a bridge
-        visited_nodes = {}
-        for node in nodes:
-            visited_nodes.update({node : False})
-        count1 = self.dfs_counter(graph, start, visited_nodes)
-
-        for node in nodes:
-            visited_nodes.update({node : False})
-        graph.remove_edge(start,end)
-        count2 = self.dfs_counter(graph, start, visited_nodes)
-        
-        graph.add_edge(start,end)
-
-        if count1 > count2:
-            return False
-        return True
-            
-    '''Finds the Eulerian tour for the given graph, beginning at the initial input current node'''
-    def get_eulerian_tour(self, graph, current, path):
-        neighbors = list(graph.neighbors(current))
-        for neighbor in neighbors:
-            if self.is_valid_edge(graph, current, neighbor):
-                path.append(neighbor)
-                graph.remove_edge(current,neighbor)
-                return self.get_eulerian_tour(graph,neighbor,path)
-        return path
-        
-    '''Takes an Eulerian graph and returns an Eulerian tour of the graph.'''
-    def fleurys_algorithm(self, graph):
-        nodes = list(graph.nodes)
-        start_node = nodes[0]
-        for node in nodes:
-            if self.is_odd(graph.degree[node]):
-                start_node = node
-                break
-        return self.get_eulerian_tour(graph, start_node, [start_node])
-
-    '''takes an eulerian tour and converts it to a hamiltonian path'''
-    def eulerian_to_hamiltonian(self, eulerian_tour):
-        visited_nodes = {}
-        for node in eulerian_tour:
-            visited_nodes.update({node : False})
-        hamiltonian_path = []
-
-        for node in eulerian_tour:
-            if not visited_nodes[node]:
-                hamiltonian_path.append(node)
-            visited_nodes.update({node : True})
-
-        hamiltonian_path.append(eulerian_tour[0])    
-        return hamiltonian_path
-
-    '''takes a graph and returns a 1.5 approximation of the optimal TSP solution using christofides algorithm'''
-    def solve(self, graph, pointset):
-        # broken into steps taken from the wikipedia page on Christofides
-        draw_nx_graph(nx.Graph(), pointset, just_nodes=True)
-
-        # Create a minimum spanning tree of graph.
-        mst = self.kruskals_algorithm(graph)
-        #draw_nx_graph(mst, pointset)
-
-        # Find the odd degree vertices of the mst
-        odd_degree = self.find_odd_degree(mst, graph)
-        #draw_nx_graph(odd_degree, pointset, just_nodes=True)
-
-        # Find a minimum-weight perfect matching in the subgraph induced in G by O.
-        mpm = self.blossom_algorithm(odd_degree)
-        #draw_nx_graph(mpm, pointset)
-
-        # Combine the edges of the mst and the mpm to form a connected multigraph in which each vertex has even degree.
-        multigraph = self.combine_graphs(mst, mpm)
-        #draw_nx_graph(multigraph, pointset)
-
-        # Form an Eulerian circuit in H.
-        circuit = self.fleurys_algorithm(multigraph)
-        #draw_tsp_paths_euclidean(circuit, pointset)
+        # Form an Eulerian circuit in H and draw its edges on the input nodes
+        circuit = cf.fleurys_algorithm(multigraph)
+        draw_tsp_paths_euclidean(circuit, pointset)
 
         # Make the circuit found in previous step into a Hamiltonian circuit by skipping repeated vertices (shortcutting).
-        tour = self.eulerian_to_hamiltonian(circuit)
+        tour = cf.eulerian_to_hamiltonian(circuit)
 
+        # Draw the final tour
         draw_tsp_paths_euclidean(tour, pointset)
-        return tour, distance(tour, graph)
 
-def distance(tour, graph):
-    total = 0
-    for i in range(len(tour) - 1):
-        total += graph[tour[i]][tour[i + 1]]['weight']
-    return total
-
-def unique(tour):
-    visited = []
-    for node in tour:
-        if node not in visited:
-            visited.append(node)
-        elif node in visited and node != visited[0]:
-            return False
-    return True
-
-def draw_nx_graph(graph, pointset, just_nodes=False):
+# depicts a networkx graph
+def draw_nx_graph(graph, pointset, just_nodes=False, title="Graph"):
     xvals = []
     yvals = []
     coords = pointset.as_name_dict()["node_coords"].values()
+
+    # draws the input nodes in grey
     for point in coords:
         xvals.append(point[0])
         yvals.append(point[1])
-    plt.scatter(xvals,yvals, color = 'grey')
-    if just_nodes == False:
+    plt.scatter(xvals, yvals, color='grey')
+
+    # draws the edges of the graph in green and fills in nodes in graph in green
+    if not just_nodes:
         for edge in graph.edges():
             plt.plot([xvals[edge[0]-1], xvals[edge[1]-1]], [yvals[edge[0]-1], yvals[edge[1]-1]], 'go-', label='path', linewidth=2)
+    
+    # draws no edges if specified
     else:
         for node in graph.nodes():
-            plt.scatter(xvals[node-1],yvals[node-1], color = 'green')
+            plt.scatter(xvals[node-1], yvals[node-1], color='green')
+            
+    plt.title(title)
     plt.show()
 
 if __name__ == "__main__":
@@ -223,5 +70,4 @@ if __name__ == "__main__":
     filename = 'datasets/tsp95/dj38.tsp'
     G = Datasets.process_tsp95(filename)
     G_pts = tsplib95.load(filename)
-    christofides = Christofides_Vis()
-    tour = christofides.solve(G, G_pts)[0]
+    tour = vis_cf(G, G_pts)

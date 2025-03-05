@@ -9,7 +9,7 @@ class Christofides(object):
     def __init__(self):
         pass
 
-    # helper function to find the root of a given node in a dictionary
+    # helper function to find the root of a given node
     def find(self, parent, n):
         if parent[n] == n:
             return n
@@ -59,9 +59,13 @@ class Christofides(object):
     '''takes a networkx graph and returns a subgraph of the nodes with odd degree (part two of christofides algorithm)'''
     def find_odd_degree(self, mst, graph):
         odd_degree = nx.Graph()
+
+        # adds the nodes to the graph 
         for node in mst.nodes():
             if self.is_odd(mst.degree(node)):
                 odd_degree.add_node(node)
+
+        # adds all the edges between the nodes into the graph
         for u, v, w in graph.edges(data=True):
             if u in odd_degree.nodes() and v in odd_degree.nodes():
                 odd_degree.add_edge(u, v, weight=w['weight'])
@@ -155,36 +159,37 @@ class Christofides(object):
         hamiltonian_path.append(eulerian_tour[0])    
         return hamiltonian_path
 
-    '''takes a graph and returns a 1.5 approximation of the optimal TSP solution using christofides algorithm'''
+    '''takes a graph and returns a 1.5 approximation of the optimal TSP solution using christofides algorithm as well as the tour's distance'''
     def solve(self, graph):
-        # broken into steps taken from the wikipedia page on Christofides
-
         # Create a minimum spanning tree of graph.
         mst = self.kruskals_algorithm(graph)
-        #print('mst:', mst.edges)
-        #draw_tsp_paths_euclidean(graph, mst.edges)
+
         # Find the odd degree vertices of the mst
         odd_degree = self.find_odd_degree(mst, graph)
-        #print('odd deg:', odd_degree.edges)
+
         # Find a minimum-weight perfect matching in the subgraph induced in G by O.
         mpm = self.blossom_algorithm(odd_degree)
-        #print('mpm:', mpm.edges)
+
         # Combine the edges of the mst and the mpm to form a connected multigraph in which each vertex has even degree.
         multigraph = self.combine_graphs(mst, mpm)
-        #print('multigraph:', multigraph.edges)
+
         # Form an Eulerian circuit in H.
         circuit = self.fleurys_algorithm(multigraph)
-        #print('circuit:', circuit)
+
         # Make the circuit found in previous step into a Hamiltonian circuit by skipping repeated vertices (shortcutting).
         tour = self.eulerian_to_hamiltonian(circuit)
+
+        # Return the resulting tour and its distance
         return tour, distance(tour, graph)
 
+# helper function to calculate the distance of a tour
 def distance(tour, graph):
     total = 0
     for i in range(len(tour) - 1):
         total += graph[tour[i]][tour[i + 1]]['weight']
     return total
 
+# helper function to check if a tour is unique
 def unique(tour):
     visited = []
     for node in tour:
