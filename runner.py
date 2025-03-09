@@ -58,7 +58,7 @@ def select_dataset():
 
     elif number == "3":
         choice = input("Select a dataset to work on:" + 
-                       "10, 20, 50, 100, 250, 500, or 1000 for ADH data with that many nodes (ex: 10 for ADH10)" + 
+                       " 10, 20, 50, 100, 250, 500, or 1000 for ADH data with that many nodes (ex: 10 for ADH10)" + 
                        "\nEnter the dataset index below: ")
         options = {"10": "ADH10", "20": "ADH20", "50": "ADH50", "100": "ADH100", 
                    "250": "ADH250", "500": "ADH500", "1000": "ADH1000"}
