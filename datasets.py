@@ -21,13 +21,30 @@ class Datasets(object):
     def load_electric_grid_dataset(file_path):
         #Here we read the cleaned data from a file, make their format friendly to networkx
         #and add them to an array. These are the edges of our graph
-        file = open("datasets/electric-grid/electric_points.tsv", "r")
+        file = open(file_path, "r")
         edges = []
         for line in file:
             split_line = line.split("\t")
             split_line[2] = float(split_line[2])
             edges.append(tuple(split_line))
         file.close()
+
+        #Here we create the graph and load the edges
+        graph = nx.Graph()
+        graph.add_weighted_edges_from(edges)
+        return graph
+    
+    def load_synthetic_dataset(file_path):
+        #Here we read the cleaned data from a file, make their format friendly to networkx
+        #and add them to an array. These are the edges of our graph
+        file = open(file_path, "r")
+        edges = []
+        for line in file:
+            split_line = line.split("\t")
+            split_line[2] = int(split_line[2])
+            edges.append(tuple(split_line))
+        file.close()
+
 
         #Here we create the graph and load the edges
         graph = nx.Graph()

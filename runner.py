@@ -22,7 +22,7 @@ def select_dataset():
     Select a dataset to work on.
     """
     number = input("Select a dataset to work on: 1 for TSP95, 2 for Electrical grid," + 
-                   " 3 for Protein data.\nEnter the number below: ") # user input
+                   " 3 for Protein data, 4 for synthetic data\nEnter the number below: ") # user input
     
     if len(number) == 0: 
         print("No dataset selected. Exiting.")
@@ -64,10 +64,18 @@ def select_dataset():
                    "250": "ADH250", "500": "ADH500", "1000": "ADH1000"}
 
         output_file += "_"+choice
+
+    elif number == "4":
+        choice = input("Select a dataset to work on:" + 
+                       "synthetic100" + 
+                       "\nEnter the dataset index below: ")
+        options = {"synthetic100": "random_generated"}
+
+        output_file += "_"+choice
         
         if choice in options:
             print(f"{options[choice]} dataset selected.")
-            return [Datasets.load_protein_dataset(f"datasets/proteins/{options[choice]}.tsv")]
+            return [Datasets.load_synthetic_dataset(f"datasets/synthetic/{options[choice]}.tsv")]
 
         print("Invalid dataset index. Exiting.")
         return None
