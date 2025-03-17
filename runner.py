@@ -135,8 +135,7 @@ def visualize_tour(tour, dataset):
         if len(dataset) == 2:
             gv.draw_tsp_paths_euclidean(tour, dataset[1])
         else:
-            print(type(tour[0]))
-            if type(tour[0]) == str:
+            if tour[0][0] == '(':
                 gv.draw_tsp_paths_euclidean(tour)
             else:
                 gv.draw_tsp_paths_noneuclidean(dataset[0], tour)

@@ -93,7 +93,7 @@ def draw_tsp_paths_noneuclidean(G, path1=None, path2=None, path3=None):
     plt.title("Graph Visualization")
     plt.show()
 
-#Given a tsp95 data set and a path, plots bath respecting euclidean points
+#Given a tsp95 data set and a path or just a path of euclidean points, plots path respecting euclidean points
 def draw_tsp_paths_euclidean(path, pointset=None):
     pathx = []
     pathy = []
@@ -104,8 +104,8 @@ def draw_tsp_paths_euclidean(path, pointset=None):
         tspgraph = pointset.get_graph()
         for point in coords:
             xvals.append(point[0])
-            yvals.append(point[1])
-        plt.scatter(xvals,yvals)
+            yvals.append(-1 * point[1])
+        plt.scatter(yvals,xvals)
         for node in path:
             pathx.append(xvals[node - 1])
             pathy.append(yvals[node - 1])
@@ -114,13 +114,13 @@ def draw_tsp_paths_euclidean(path, pointset=None):
         for point in path:
             litpoint = ast.literal_eval(point)
             pathx.append(litpoint[0])
-            pathy.append(litpoint[1])
+            pathy.append(-1 *litpoint[1])
     
     
 
 
     
-    plt.plot(pathx, pathy, 'go-', label='path', linewidth=2)
+    plt.plot(pathy, pathx, 'go-', label='path', linewidth=2)
 
     plt.show()
 
