@@ -9,7 +9,7 @@ import time
 import sys
 
 """
-For reproducing the timing results, run it as runner.py < input_data.txt
+This file creates visualizations for tours based on a file containing a tour and the graph per se
 """
 
 sys.setrecursionlimit(2147483647)
@@ -21,7 +21,7 @@ def select_dataset():
     global input_file
     global should_update
     """
-    Select a dataset to work on.
+    Select a dataset to work with.
     """
     number = input("Select a dataset to work on: 1 for TSP95, 2 for Electrical grid," + 
                    " 3 for Protein data.\nEnter the number below: ") # user input
@@ -143,13 +143,14 @@ def visualize_tour(tour, dataset):
         print("Invalid algorithm number. Exiting.")
 
 def main():
-
+    #Validate selections
     dataset = select_dataset()
     if dataset is None:
         return
     algorithm = select_algorithm()
     if not algorithm:
         return
+    #Read solved tour from file 
     tour_file = open("results/tour"+input_file+".txt", "r")
     tour = []
     for line in tour_file:
